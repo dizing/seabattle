@@ -1,5 +1,6 @@
 package io.github.dizing.controllers;
 
+import io.github.dizing.App;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -8,9 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import io.github.dizing.models.Field;
 import io.github.dizing.models.Ship;
-import io.github.dizing.views.View;
+import io.github.dizing.views.FieldView;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -28,7 +30,7 @@ public class Controller implements Initializable {
 
     Field field = new Field();
 
-    View view;
+    FieldView view;
 
     private void gridClickHandler(MouseEvent event){
         Point clickPoint = Field.calculateCoordsFromRaw(event.getX(), event.getY(), fxGrid.getWidth(), fxGrid.getHeight());
@@ -42,7 +44,8 @@ public class Controller implements Initializable {
         } else {
             System.out.println("invalid coordinates");
         }
-        View.setFieldStatus(fxShipCountLabel, field.getRemindShipCount());
+        fxShipCountLabel.setText(field.getRemainShipCount());
+
     }
 
 
@@ -50,9 +53,13 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Инициализация и передача контроля в View класс labelFx
         // Добавляем слушателя, по клику мышки на кнопку, выводит текст на консоль
-        view = new View(fxGrid);
+        view = new FieldView(fxGrid);
         fxGrid.addEventHandler(MouseEvent.MOUSE_CLICKED, this::gridClickHandler);
-        View.setFieldStatus(fxShipCountLabel, field.getRemindShipCount());
+        fxShipCountLabel.setText(field.getRemainShipCount());
+    }
 
+    @FXML
+    private void switchToMainGame() throws IOException {
+        App.setRoot("mainGame");
     }
 }
