@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Field {
 
-    private ArrayList<Ship> shipsArray;
+    public ArrayList<Ship> shipsArray;
     int[] lengthShipCounters = {0, 0, 0, 0};
     private static final int[] LENGTH_SHIP_COUNTER_MAXES = {4, 3, 2, 1};
 
@@ -41,12 +41,16 @@ public class Field {
         shipsArray = new ArrayList<Ship>();
     }
 
-    public int[] getRemindShipCount(){
+    public String getRemainShipCount(){
         int[] remainShipCount = new int[4];
         for(int i = 0; i < 4; ++i){
             remainShipCount[i] = LENGTH_SHIP_COUNTER_MAXES[i] - lengthShipCounters[i];
         }
 
-        return remainShipCount;
+        return "У вас осталось:\n" +
+                remainShipCount[0] + " однопалубных\n" +
+                remainShipCount[1] + " двухпалубных\n" +
+                remainShipCount[2] + " трехпалубных\n" +
+                remainShipCount[3] + " четырехпалубных\n";
     }
 }

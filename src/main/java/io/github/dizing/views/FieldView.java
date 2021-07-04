@@ -6,7 +6,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import io.github.dizing.models.Ship;
 import io.github.dizing.App;
-public class View {
+
+public class FieldView {
 
     private final Image clearField;
     private final Image verticalTopShip;
@@ -77,7 +78,7 @@ public class View {
                 "-fx-border-width: 1 1 1 1");
     }
 
-    public View(GridPane fxGrid){
+    public FieldView(GridPane fxGrid){
         clearField = new Image(String.valueOf(App.class.getResource("images/01.png")));
         verticalTopShip = new Image(String.valueOf(App.class.getResource("images/02.png")));
         verticalMiddleShip = new Image(String.valueOf(App.class.getResource("images/03.png")));
@@ -95,14 +96,5 @@ public class View {
                 panesArray[i][j] = placePane(fxGrid, clearField, i, j);
             }
         }
-    }
-
-
-    public static void setFieldStatus(Label fxShipCountLabel, int[] fieldStatus){
-        fxShipCountLabel.setText("У вас осталось:\n" +
-                fieldStatus[0] + " однопалубных\n" +
-                fieldStatus[1] + " двухпалубных\n" +
-                fieldStatus[2] + " трехпалубных\n" +
-                fieldStatus[3] + " четырехпалубных\n");
     }
 }
