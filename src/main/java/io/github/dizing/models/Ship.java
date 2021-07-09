@@ -7,6 +7,7 @@ public class Ship {
     public ArrayList<Point> shipPoints;
     public int length;
     public String direction;
+    public ArrayList<Point> blastedShipPoints;
 
     static public boolean validateShipPoint(Point leftTop, int shipLength, String direction) {
         return direction.equals("horizontal") & leftTop.x + shipLength < 11 |
@@ -43,4 +44,13 @@ public class Ship {
             shipPoints.add(new Point(x, y));
         }
     }
+
+    public boolean checkBlasted(){
+        return blastedShipPoints.containsAll(shipPoints) && shipPoints.containsAll(blastedShipPoints);
+    }
+
+    public void blast(Point point){
+        blastedShipPoints.add(point);
+    }
+
 }

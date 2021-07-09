@@ -79,7 +79,7 @@
       </HBox>
    </center>
    <bottom>
-      <Label fx:id="fxStatusMoveLabel" text="Label" BorderPane.alignment="CENTER" />
+      <Label fx:id="fxStatusMoveLabel" text=" " BorderPane.alignment="CENTER" style="-fx-font-size: 20px"/>
    </bottom>
    <top>
       <VBox minHeight="10.0" minWidth="10.0" BorderPane.alignment="CENTER">
