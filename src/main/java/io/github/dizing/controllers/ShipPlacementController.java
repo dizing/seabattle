@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class Controller implements Initializable {
+public class ShipPlacementController implements Initializable {
 
     @FXML
     private GridPane fxGrid;

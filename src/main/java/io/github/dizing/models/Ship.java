@@ -32,6 +32,7 @@ public class Ship {
         this.length = shipLength;
         this.direction = direction;
         shipPoints = new ArrayList<Point>();
+        blastedShipPoints = new ArrayList<Point>();
         shipPoints.add(leftTop);
         int x = leftTop.x;
         int y = leftTop.y;

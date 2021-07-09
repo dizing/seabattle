@@ -92,7 +92,7 @@ public class FieldView {
     }
 
     public boolean placeSplash(Point point){
-        if (!splashesArray[point.x][point.y]){
+        if (!splashesArray[point.x][point.y] & !crashPointsArray[point.x][point.y]){
             splashesArray[point.x][point.y] = true;
             System.out.println(point.x + " " + point.y);
             switchPaneImage(splash, point.x, point.y);

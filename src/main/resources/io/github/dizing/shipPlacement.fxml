@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="620.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.dizing.controllers.Controller">
+<BorderPane prefHeight="620.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.dizing.controllers.ShipPlacementController">
    <center>
       <GridPane fx:id="fxGrid" gridLinesVisible="true" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -71,7 +71,7 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <ChoiceBox fx:id="fxLengthShipBox" minWidth="112.0" value="1 cell">
+            <ChoiceBox fx:id="fxLengthShipBox" minWidth="90.0" value="1 cell">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="1 cell" />
