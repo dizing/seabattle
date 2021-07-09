@@ -3,6 +3,7 @@ package io.github.dizing.controllers;
 import io.github.dizing.models.Field;
 import io.github.dizing.models.Ship;
 import io.github.dizing.models.UserFieldSingleton;
+import io.github.dizing.models.BotModel;
 import io.github.dizing.views.FieldView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,11 +28,25 @@ public class MainController implements Initializable {
     Field userField;
     Field botField;
 
+    private boolean gameStop = false;
+
     private void rightFieldClickHandler(MouseEvent event){
+        if (gameStop){
+            return;
+        }
+        boolean isPlayerHit = true;
+        boolean isBotHit = true;
         Point clickPoint = Field.calculateCoordsFromRaw(event.getX(), event.getY(), fxGridRight.getWidth(), fxGridRight.getHeight());
-        playerMove(clickPoint);
+        isPlayerHit = playerMove(clickPoint);
+        if(isPlayerHit) {
+            checkFieldsOnEnd();
+            return;
+        }
+        while (isBotHit) {
+            isBotHit = botMove();
+            checkFieldsOnEnd();
+        }
         //fxStatusMoveLabel.setText(game.getMoveInfo);
-        System.out.println("dsd");
     }
 
 
@@ -40,20 +55,52 @@ public class MainController implements Initializable {
         view.placeShip(ship);
     }
 
-    private void playerMove(Point clickPoint){
+    private boolean playerMove(Point clickPoint){
+        boolean isPlayerMove = false;
         boolean modelResult = botField.placeMove(clickPoint);
         boolean viewResult;
         if (modelResult){
             viewResult = rightFieldView.placeMove(clickPoint);
-            System.out.println("move" + clickPoint.x + clickPoint.y);
+            isPlayerMove = true;
         } else {
             viewResult = rightFieldView.placeSplash(clickPoint);
-            System.out.println("splash" + clickPoint.x + clickPoint.y);
         }
         if(!viewResult){
             fxStatusMoveLabel.setText("Ход по этому месту уже был, сходите заново");
+            isPlayerMove = true;
         } else {
             fxStatusMoveLabel.setText(" ");
+        }
+        return isPlayerMove;
+    }
+
+    private boolean botMove(){
+        boolean viewResult = false;
+        boolean modelResult;
+        boolean isBotHit = false;
+        Point point;
+        while(!viewResult){
+            point = BotModel.getBotMovePoint();
+            modelResult = userField.placeMove(point);
+            if (modelResult){
+                viewResult = leftFieldView.placeMove(point);
+                isBotHit = true;
+            } else {
+                viewResult = leftFieldView.placeSplash(point);
+                isBotHit = false;
+            }
+            System.out.println("loop error 3");
+        }
+        return isBotHit;
+    }
+
+    private void checkFieldsOnEnd(){
+        if (userField.shipsArray.size() == 0){
+            fxStatusMoveLabel.setText("Победил бот!");
+            gameStop = true;
+        } else if(botField.shipsArray.size() == 0){
+            fxStatusMoveLabel.setText("Победил игрок!");
+            gameStop = true;
         }
     }
 
@@ -62,9 +109,10 @@ public class MainController implements Initializable {
         leftFieldView = new FieldView(fxGridLeft);
         rightFieldView = new FieldView(fxGridRight);
         userField = UserFieldSingleton.getInstance().getUserField();
-        botField = new Field(); // REFACTOR BOT FIELD
+        botField = new Field();
+        BotModel.placeShips(botField);
         drawField(userField, leftFieldView);
-        drawField(botField, rightFieldView);
+        //drawField(botField, rightFieldView);
         fxGridRight.addEventHandler(MouseEvent.MOUSE_CLICKED, this::rightFieldClickHandler);
     }
 }
