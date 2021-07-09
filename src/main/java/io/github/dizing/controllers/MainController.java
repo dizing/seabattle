@@ -2,6 +2,7 @@ package io.github.dizing.controllers;
 
 import io.github.dizing.models.Field;
 import io.github.dizing.models.Ship;
+import io.github.dizing.models.UserFieldSingleton;
 import io.github.dizing.views.FieldView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,14 +21,17 @@ public class MainController implements Initializable {
     private GridPane fxGridRight;
     @FXML
     private Label fxStatusMoveLabel;
+
     FieldView leftFieldView;
     FieldView rightFieldView;
-
+    Field userField;
+    Field botField;
 
     private void rightFieldClickHandler(MouseEvent event){
         Point clickPoint = Field.calculateCoordsFromRaw(event.getX(), event.getY(), fxGridRight.getWidth(), fxGridRight.getHeight());
-        //game.playerMove(clickPoint);
+        playerMove(clickPoint);
         //fxStatusMoveLabel.setText(game.getMoveInfo);
+        System.out.println("dsd");
     }
 
 
@@ -36,12 +40,31 @@ public class MainController implements Initializable {
         view.placeShip(ship);
     }
 
+    private void playerMove(Point clickPoint){
+        boolean modelResult = botField.placeMove(clickPoint);
+        boolean viewResult;
+        if (modelResult){
+            viewResult = rightFieldView.placeMove(clickPoint);
+            System.out.println("move" + clickPoint.x + clickPoint.y);
+        } else {
+            viewResult = rightFieldView.placeSplash(clickPoint);
+            System.out.println("splash" + clickPoint.x + clickPoint.y);
+        }
+        if(!viewResult){
+            fxStatusMoveLabel.setText("Ход по этому месту уже был, сходите заново");
+        } else {
+            fxStatusMoveLabel.setText(" ");
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         leftFieldView = new FieldView(fxGridLeft);
         rightFieldView = new FieldView(fxGridRight);
-        //drawField(game.getPlayerField, leftFieldView);
-        //drawField(game.getBotField, rightFieldView);
+        userField = UserFieldSingleton.getInstance().getUserField();
+        botField = new Field(); // REFACTOR BOT FIELD
+        drawField(userField, leftFieldView);
+        drawField(botField, rightFieldView);
         fxGridRight.addEventHandler(MouseEvent.MOUSE_CLICKED, this::rightFieldClickHandler);
     }
 }

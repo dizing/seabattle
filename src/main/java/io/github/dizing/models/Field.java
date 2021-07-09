@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Field {
 
     public ArrayList<Ship> shipsArray;
+    public ArrayList<Ship> blastedShipsArray;
     int[] lengthShipCounters = {0, 0, 0, 0};
     private static final int[] LENGTH_SHIP_COUNTER_MAXES = {4, 3, 2, 1};
 
@@ -39,6 +40,7 @@ public class Field {
 
     public Field() {
         shipsArray = new ArrayList<Ship>();
+        blastedShipsArray = new ArrayList<Ship>();
     }
 
     public String getRemainShipCount(){
@@ -52,5 +54,19 @@ public class Field {
                 remainShipCount[1] + " двухпалубных\n" +
                 remainShipCount[2] + " трехпалубных\n" +
                 remainShipCount[3] + " четырехпалубных\n";
+    }
+
+    public boolean placeMove(Point point){
+        for(Ship ship: shipsArray){
+            if (ship.shipPoints.contains(point)){
+                ship.blast(point);
+                if(ship.checkBlasted()){
+                    shipsArray.remove(ship);
+                    blastedShipsArray.add(ship);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

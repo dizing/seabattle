@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import io.github.dizing.models.Ship;
 import io.github.dizing.App;
 
+import java.awt.*;
+
 public class FieldView {
 
     private final Image clearField;
@@ -20,7 +22,9 @@ public class FieldView {
     private final Image horizontalLeftShip;
     private final Image oneLengthShip;
 
-    static public Pane[][] panesArray = new Pane[10][10];
+    private Pane[][] panesArray = new Pane[10][10];
+    private boolean[][] splashesArray = new boolean[10][10];
+    private boolean[][] crashPointsArray = new boolean[10][10];
 
     private GridPane fxGrid;
 
@@ -76,6 +80,25 @@ public class FieldView {
     private void switchPaneImage(Image image, int x, int y){
         panesArray[x][y].setStyle("-fx-background-image: url(" + image.getUrl() + "); -fx-background-size: 100% 100%;-fx-border-color: black;" +
                 "-fx-border-width: 1 1 1 1");
+    }
+
+    public boolean placeMove(Point point){
+        if (!crashPointsArray[point.x][point.y]){
+            crashPointsArray[point.x][point.y] = true;
+            switchPaneImage(brokenShip, point.x, point.y);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean placeSplash(Point point){
+        if (!splashesArray[point.x][point.y]){
+            splashesArray[point.x][point.y] = true;
+            System.out.println(point.x + " " + point.y);
+            switchPaneImage(splash, point.x, point.y);
+            return true;
+        }
+        return false;
     }
 
     public FieldView(GridPane fxGrid){
